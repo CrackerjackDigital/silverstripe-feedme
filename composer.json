@@ -1,8 +1,8 @@
 {
-    "name": "crackerjackdigital/feedme",
+    "name": "crackerjackdigital/silverstripe-feedme",
     "description": "RSS2 and ATOM feed import module for SilverStripe",
     "type": "silverstripe-module",
-    "keywords": ["silverstripe", "rss", "atom", "feed", "import"],
+    "keywords": ["silverstripe", "rss2", "rss", "atom", "feed", "import"],
     "license": "BSD-3-Clause",
     "authors": [
         {
