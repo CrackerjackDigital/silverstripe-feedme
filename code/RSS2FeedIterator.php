@@ -12,18 +12,18 @@ class FeedMeRSS2FeedIterator extends FeedMeFeedIterator {
     public function map(array $itemDataFromFeed) {
         return array_combine(
             [
-                FeedMeItemModelExtension::TitleField,
-                FeedMeItemModelExtension::BodyField,
-                FeedMeItemModelExtension::ExternalIDFieldName,
-                FeedMeItemModelExtension::LinkFieldName,
-                FeedMeItemModelExtension::LastPublishedFieldName
+                $this->fieldMap[FeedMeItemModelExtension::TitleFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::BodyFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::ExternalIDFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::LinkFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::LastPublishedFieldName]
             ],
             [
-                (string)$itemDataFromFeed->title,
-                (string)$itemDataFromFeed->description,
-                (string)$itemDataFromFeed->guid,
-                (string)$itemDataFromFeed->link,
-                (string)$itemDataFromFeed->pubDate
+                (string)$itemDataFromFeed['title'],
+                (string)$itemDataFromFeed['description'],
+                (string)$itemDataFromFeed['guid'],
+                (string)$itemDataFromFeed['link'],
+                (string)$itemDataFromFeed['pubDate']
             ]
         );
     }

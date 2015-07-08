@@ -28,9 +28,9 @@ class FeedMeModelExtension extends DataExtension {
     const LastPublishedFieldName = 'FeedMeLastPublished';
     const LastPublishedFieldType = 'Varchar(64)';
 
-    protected static $feedme_field_map = [];
+    private static $feedme_field_map = [];
 
-    protected static $feedme_field_types = [];
+    private static $feedme_field_types = [];
 
     /**
      * Update from a neutral map as defined in config.feedme_feed_field_map to actual
@@ -67,7 +67,7 @@ class FeedMeModelExtension extends DataExtension {
         $map = $this->owner->config()->get(static::FieldMapConfigVariable);
         return $neutralFieldName ? $map[$neutralFieldName] : $map;
     }
-
+/*
     public static function get_extra_config($class, $extension, $args) {
         $config = Config::inst()->forClass(get_called_class());
 
@@ -91,7 +91,7 @@ class FeedMeModelExtension extends DataExtension {
         );
 
     }
-
+*/
     /**
      * Return the name of the class being used to represent items.
      *
@@ -100,6 +100,18 @@ class FeedMeModelExtension extends DataExtension {
     protected static function model_class() {
         return get_class(Injector::inst()->get(static::InjectorServiceName));
     }
+
+    /**
+     * Return the field map for the extension.
+     *
+     * @return array
+     */
+    public static function field_map() {
+        $map = Config::inst()->get(static::model_class(), static::FieldMapConfigVariable);
+        return $map;
+    }
+
+
 
     /**
      * Return this extensions relationship name to other compoenent of the feed/item relationship (not the extended classes).

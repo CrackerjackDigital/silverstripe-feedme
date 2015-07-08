@@ -28,7 +28,8 @@ class FeedMeSyncTask extends BuildTask {
      */
     public function run($request) {
         if (!$adminEmail = $this->config()->get('administrator_email')) {
-            $adminEmail = reset($this->extend('feedMeAdminEmail'));
+            $contenders = $this->extend('feedMeAdminEmail') ?: [];
+            $adminEmail = reset($contenders);
         }
         if ($adminEmail) {
             SS_Log::add_writer(new SS_LogEmailWriter($adminEmail, SS_Log::INFO));

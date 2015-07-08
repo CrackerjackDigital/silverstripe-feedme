@@ -4,11 +4,14 @@
  */
 abstract class FeedMeFeedIterator implements Iterator {
 
-    /** @var DOMNodeList */
+    /** @var array */
     protected $items = null;
 
     /** @var int  */
     protected $index = 0;
+
+    /** @var  array */
+    protected $fieldMap;
 
     /** @var  string  */
     protected $url;
@@ -17,8 +20,9 @@ abstract class FeedMeFeedIterator implements Iterator {
      * @param DOMNodeList $items
      * @param $url - original feed url e.g. for use as default link on item if no specific link can be found
      */
-    public function __construct(DOMNodeList $items, $url) {
+    public function __construct(array $items, $fieldMap, $url) {
         $this->items = $items;
+        $this->fieldMap = $fieldMap;
         $this->url = $url;
     }
 
@@ -32,15 +36,18 @@ abstract class FeedMeFeedIterator implements Iterator {
     public function current() {
         // probably don't need to call valid as should be valid, it's cheap though.
         if ($this->valid()) {
-            $item = $this->items->item($this->index);
-
-            // model should have 'FeedMeItemModelExtension' extension
-            $model = Injector::inst()->create('FeedMeItemModelClass');
+            $item = $this->items[$this->index];
 
             // import the feed item via a 'neutral' map constructed by concrete class map call.
-            $map = $this->map($item);
+            $map = $this->map((array)$item);
 
-            return $model->feedMeImport($map);
+            // model should have 'FeedMeItemModelExtension' extension
+            $model = Injector::inst()->create('FeedMeItemModelClass', $map);
+
+            // give chance to patch up any extra variables from map etc
+            $model->feedMeImported($map);
+
+            return $model;
         }
     }
     /**
@@ -80,7 +87,7 @@ abstract class FeedMeFeedIterator implements Iterator {
      * Returns true on success or false on failure.
      */
     public function valid() {
-        return $this->index < $this->items->length;
+        return $this->index < count($this->items);
     }
 
     /**

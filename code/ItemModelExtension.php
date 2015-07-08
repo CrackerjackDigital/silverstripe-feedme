@@ -20,21 +20,21 @@ class FeedMeItemModelExtension extends FeedMeModelExtension {
 
     const InjectorServiceName = 'FeedMeItemModelClass';
 
-    protected static $feedme_feed_relationship = self::RelationshipNameDefault;
+    private static $feedme_feed_relationship = self::RelationshipNameDefault;
 
     // default field map from 'neutral' name to model field name, these should be set in config
     // of the extended model class where fields which already exist are going ot be used instead of
     // fields added by this extension
-    protected static $feedme_field_map = [
+    private static $feedme_field_map = [
         self::TitleFieldName => self::TitleFieldName,                   // override in config for extended model
-        self::BodyFieldType => self::BodyFieldName,                     // override in config for extended model
+        self::BodyFieldName => self::BodyFieldName,                     // override in config for extended model
         self::ExternalIDFieldName => self::ExternalIDFieldName,         // default map
         self::LinkFieldName => self::LinkFieldName,                     // default map
         self::LastPublishedFieldName => self::LastPublishedFieldName    // default map
     ];
 
     // default field types incase we need to create fields on the model
-    protected static $feedme_field_types = [
+    private static $feedme_field_types = [
         self::TitleFieldName => self::TitleFieldType,
         self::BodyFieldName => self::BodyFieldType,
         self::ExternalIDFieldName => self::ExternalIDFieldType,
@@ -50,6 +50,7 @@ class FeedMeItemModelExtension extends FeedMeModelExtension {
      * @param $args
      * @return array
      */
+/*
     public static function get_extra_config($class, $extension, $args) {
         return array_merge_recursive(
             parent::get_extra_config($class, $extension, $args) ?: [],
@@ -58,4 +59,5 @@ class FeedMeItemModelExtension extends FeedMeModelExtension {
             ]
         );
     }
+*/
 }

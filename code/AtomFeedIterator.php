@@ -28,18 +28,18 @@ class FeedMeAtomFeedIterator extends FeedMeFeedIterator {
         }
         return array_combine(
             [
-                FeedMeItemModelExtension::TitleField,
-                FeedMeItemModelExtension::BodyField,
-                FeedMeItemModelExtension::ExternalIDFieldName,
-                FeedMeItemModelExtension::LinkFieldName,
-                FeedMeItemModelExtension::LastPublishedFieldName
+                $this->fieldMap[FeedMeItemModelExtension::TitleFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::BodyFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::ExternalIDFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::LinkFieldName],
+                $this->fieldMap[FeedMeItemModelExtension::LastPublishedFieldName]
             ],
             [
-                (string)$itemDataFromFeed->title,
-                (string)$itemDataFromFeed->description,
-                (string)$itemDataFromFeed->id,
+                (string)$itemDataFromFeed['title'],
+                (string)$itemDataFromFeed['description'],
+                (string)$itemDataFromFeed['id'],
                 $link,
-                (string)$itemDataFromFeed->updated
+                (string)$itemDataFromFeed['updated']
             ]
         );
     }
