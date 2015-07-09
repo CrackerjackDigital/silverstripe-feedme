@@ -10,9 +10,11 @@ interface FeedMeFeedInterface {
 
     /**
      * Called by FeedMeFeedModelExtension when it has finished importing the feed.
+     *
+     * @param array $valuesFromFeed - all values from feed, may not have changed though.
      * @return mixed
      */
-    public function feedMeImported();
+    public function feedMeImported(array $valuesFromFeed = []);
 
     /**
      * Called by FeedMeFeedModelExtension when it has finished updating the feed model.
