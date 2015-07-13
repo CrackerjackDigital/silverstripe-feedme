@@ -13,7 +13,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 
     const RelationshipNameConfigVariable = 'feedme_item_relationship';
 
-    const InjectorServiceName = 'FeedMeFeedModelClass';
+    const InjectorServiceName = 'FeedMeFeedModel';
 
     // if true feed will be imported onAfterWrite of extended Feed object.
     private static $feedme_import_on_write = true;
@@ -27,7 +27,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
         self::TitleFieldName => '',                                     // map to extended classes Title field
         self::DescriptionFieldName => '',                               // map to extended classes Description field
         self::ExternalIDFieldName => self::ExternalIDFieldName,         // default map
-        self::LinkFieldName => self::LinkFieldName,                       // default map
+        self::LinkFieldName => self::LinkFieldName,                     // default map
         self::LastPublishedFieldName => self::LastPublishedFieldName    // default map
     ];
 
@@ -55,6 +55,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
      * @return array
      */
 /*
+    TODO: DUNT WORK, MAKE WORK as would be really cool to configure this dynamically from config variables
     public static function get_extra_config($class, $extension, $args) {
         return array_merge_recursive(
             parent::get_extra_config($class, $extension, $args) ?: [],
@@ -98,11 +99,13 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
      */
     public function updateCMSFields(FieldList $fields) {
         $fields->insertBefore(
-            new TextField(self::link_field(), 'Feed URL'),
-            self::get_model_field_name(self::DescriptionFieldName)
+            new TextField($this->linkField(), 'Feed URL'),
+            $this->getModelFieldName(self::DescriptionFieldName)
         );
+
+        $externalIDField = $this->externalIDField();
         $fields->push(
-            new LiteralField(self::external_id_field(), 'Feed ID', '<p>' . $this->owner->{self::external_id_field()})
+            new LiteralField($externalIDField, 'Feed ID', '<p>' . $this->owner->{$externalIDField})
         );
     }
 
@@ -111,19 +114,20 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
      * the Posts relationship depending on match on PostModel.ExternalID.
      */
     public function feedMeImport() {
-        $fieldURL = $this->getFeedURL();
+        $feedURL = $this->getFeedURL();
 
-        if ($items = self::digest($fieldURL)) {
-            $relationshipName = self::relationship_name();
-            $externalIDField = FeedMeItemModelExtension::ExternalIDFieldName;
+        if ($items = self::digest($feedURL)) {
+            $relationshipName = $this->feedMeRelationship();
 
-            /** @var HasManyList $existing */
-            $existing = $this->owner->$relationshipName();
+            $externalIDFieldName = Injector::inst()->get('FeedMeItemModel')->externalIDField();
+
+            /** @var HasManyList $existingItems */
+            $existingItems = $this->owner->$relationshipName();
 
             /** @var DataObject $itemModel */
             foreach ($items as $itemModel) {
                 // if post with the ExternalID already exists then update that one.
-                if ($found = $existing->find($externalIDField, $itemModel->{$externalIDField})) {
+                if ($found = $existingItems->find($externalIDFieldName, $itemModel->{$externalIDFieldName})) {
 
                     // update the found one from map of the new one
                     $found->update($itemModel->toMap());
@@ -146,7 +150,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
      * @return string|null
      */
     protected function getFeedURL() {
-        $fieldName = self::link_field();
+        $fieldName = $this->linkField();
         return $this->owner->{$fieldName};
     }
     /**
@@ -171,10 +175,13 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
                 foreach (self::supported_formats() as $feedType => $itemPath) {
                     $items = $doc->xpath($itemPath);
                     if ($items && count($items)) {
-                        $className = "FeedMe{$feedType}FeedIterator";
+
+                        $className = self::build_service_name($feedType);
+
+                        $fieldMap = Injector::inst()->get('FeedMeItemModel')->fieldMap();
 
                         // create and return a new FeedIterator of the detected type with the configured item map item
-                        $itr = Injector::inst()->create($className, $items, FeedMeItemModelExtension::field_map(), $feedURL);
+                        $itr = Injector::inst()->create($className, $items, $fieldMap, $feedURL);
                         break;
 
                     }
@@ -190,6 +197,18 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
      */
     private function importOnWrite() {
         return $this->owner->config()->get('feedme_import_on_write');
+    }
+
+    /**
+     * Build the name of the service to get from Injector for the particular feed type.
+     * This pattern should allow you to add new FeedIterator types following this naming convention
+     * FeedMe{feedType}FeedIterator by adding to the config.supported_formats map.
+     *
+     * @param $feedType
+     * @return string
+     */
+    protected static function build_service_name($feedType) {
+        return "FeedMe{$feedType}FeedIterator";
     }
 
 

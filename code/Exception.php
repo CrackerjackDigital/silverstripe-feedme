@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Exception class so we know where problem came from and can handle accordingly.
+ * Exception class helps identify where exceptions came from.
  */
 class FeedMeException extends Exception {
 

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Provides map function from RSS2 data to 'neutral' model.
+ */
 
 class FeedMeRSS2FeedIterator extends FeedMeFeedIterator {
     /**

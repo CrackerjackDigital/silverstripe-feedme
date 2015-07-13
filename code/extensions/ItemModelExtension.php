@@ -18,7 +18,7 @@ class FeedMeItemModelExtension extends FeedMeModelExtension {
 
     const RelationshipNameConfigVariable = 'feedme_feed_relationship';
 
-    const InjectorServiceName = 'FeedMeItemModelClass';
+    const InjectorServiceName = 'FeedMeItemModel';
 
     private static $feedme_feed_relationship = self::RelationshipNameDefault;
 
@@ -51,6 +51,7 @@ class FeedMeItemModelExtension extends FeedMeModelExtension {
      * @return array
      */
 /*
+    TODO: DUNT WORK, MAKE WORK as would be really cool to configure this dynamically from config variables
     public static function get_extra_config($class, $extension, $args) {
         return array_merge_recursive(
             parent::get_extra_config($class, $extension, $args) ?: [],

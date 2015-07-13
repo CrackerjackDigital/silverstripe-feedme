@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Provides map function from Atom data to 'neutral' model.
+ */
 
 class FeedMeAtomFeedIterator extends FeedMeFeedIterator {
     /**

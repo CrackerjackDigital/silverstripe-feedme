@@ -27,7 +27,7 @@ abstract class FeedMeFeedIterator implements Iterator {
     }
 
     /**
-     * Create a model instance using injector.FeedMeModelClass and then import values from
+     * Create a model instance using injector.FeedMeModel and then import values from
      * current iterator item via FeedMeItemModelExtension.feedMeImport
      *
      * @throws FeedMeException
@@ -42,7 +42,7 @@ abstract class FeedMeFeedIterator implements Iterator {
             $map = $this->map((array)$item);
 
             // model should have 'FeedMeItemModelExtension' extension
-            $model = Injector::inst()->create('FeedMeItemModelClass', $map);
+            $model = Injector::inst()->create('FeedMeItemModel', $map);
 
             // give chance to patch up any extra variables from map etc
             $model->feedMeImported($map);

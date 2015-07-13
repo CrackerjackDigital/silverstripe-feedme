@@ -67,31 +67,7 @@ class FeedMeModelExtension extends DataExtension {
         $map = $this->owner->config()->get(static::FieldMapConfigVariable);
         return $neutralFieldName ? $map[$neutralFieldName] : $map;
     }
-/*
-    public static function get_extra_config($class, $extension, $args) {
-        $config = Config::inst()->forClass(get_called_class());
 
-        $fieldMap = $config->get(static::FieldMapConfigVariable);
-        $fieldTypes = $config->get(static::FieldTypesConfigVariable);
-
-        $dbFields = [];
-
-        // if the field on the model still starts with 'FeedMe' then we need to add it to the model
-        // otherwise it has probably been changed to a field which already exists on the model.
-        foreach ($fieldMap as $neutralFieldName => $_) {
-            if (substr($fieldMap[$neutralFieldName], 0, 6) === 'FeedMe') {
-                $dbFields[$fieldMap[$neutralFieldName]] = $fieldTypes[$neutralFieldName];
-            }
-        }
-        return array_merge_recursive(
-            parent::get_extra_config($class, $extension, $args) ?: [],
-            [
-                'db' => $dbFields
-            ]
-        );
-
-    }
-*/
     /**
      * Return the name of the class being used to represent items.
      *
@@ -106,44 +82,49 @@ class FeedMeModelExtension extends DataExtension {
      *
      * @return array
      */
-    public static function field_map() {
-        $map = Config::inst()->get(static::model_class(), static::FieldMapConfigVariable);
-        return $map;
+    public function fieldMap() {
+        return $this->owner->config()->get(static::FieldMapConfigVariable);
     }
 
-
+    /**
+     * Static field map via singleton of called class.
+     * @return array
+     */
+    public static function field_map() {
+        return singleton(get_called_class())->fieldMap();
+    }
 
     /**
      * Return this extensions relationship name to other compoenent of the feed/item relationship (not the extended classes).
      *
      * @return string
      */
-    protected static function relationship_name() {
-        return Config::inst()->get(get_called_class(), static::RelationshipNameConfigVariable);
+    public function feedMeRelationship() {
+        return $this->owner->config()->get(static::RelationshipNameConfigVariable);
     }
 
     /**
      * Return the name of the field on the extended model where the Title is stored (via field map).
      * @return mixed
      */
-    protected static function title_field() {
-        return static::get_model_field_name(static::TitleFieldName);
+    public function titleField() {
+        return $this->getModelFieldName(static::TitleFieldName);
     }
 
     /**
      * Return the name of the field on the extended model where the External ID is stored (via field map).
      * @return mixed
      */
-    protected static function link_field() {
-        return static::get_model_field_name(static::LinkFieldName);
+    public function linkField() {
+        return $this->getModelFieldName(static::LinkFieldName);
     }
 
     /**
      * Return the name of the field on the extended model where the External ID is stored (via field map).
      * @return mixed
      */
-    protected static function external_id_field() {
-        return static::get_model_field_name(self::ExternalIDFieldName);
+    public function externalIDField() {
+        return $this->getModelFieldName(static::ExternalIDFieldName);
     }
 
     /**
@@ -151,8 +132,8 @@ class FeedMeModelExtension extends DataExtension {
      *
      * @return string
      */
-    protected static function last_published_field() {
-        return static::get_model_field_name(static::LastPublishedFieldName);
+    public function lastPublishedDateField() {
+        return $this->getModelFieldName(static::LastPublishedFieldName);
     }
 
     /**
@@ -161,10 +142,9 @@ class FeedMeModelExtension extends DataExtension {
      * @param $neutralName
      * @return string|null
      */
-    protected static function get_model_field_name($neutralName) {
-        $map = Config::inst()->get(get_called_class(), static::FieldMapConfigVariable);
+    protected function getModelFieldName($neutralName) {
+        $map = $this->owner->config()->get(static::FieldMapConfigVariable);
         return isset($map[$neutralName]) ? $map[$neutralName] : null;
     }
-
 
 }
