@@ -37,11 +37,6 @@ class FeedMeSyncTask extends BuildTask {
         // anything like a warning or above
         SS_Log::add_writer(new SS_LogEmailWriter(Security::findAnAdministrator()->Email), SS_Log::WARN);
 
-        TestModeExtension::disable();
-        SystemDataExtension::disable();
-        // set automatic approval mode on Posts
-        ApproveableExtension::set_approval_mode(ApproveableExtension::ApprovalAutomatic);
-
         $excludedFeedClasses = $this->config()->get('excluded_feed_class_names');
 
         // for each implementor of the FeedMeFeedInterface check if it's not excluded then for each
@@ -57,11 +52,5 @@ class FeedMeSyncTask extends BuildTask {
                 }
             }
         }
-
-
-        // reset approval mode to what it was before by passing null
-        ApproveableExtension::set_approval_mode();
-        TestModeExtension::enable();
-        SystemDataExtension::enable();
     }
 }
