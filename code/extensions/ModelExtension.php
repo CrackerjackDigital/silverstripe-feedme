@@ -3,7 +3,7 @@
 
 class FeedMeModelExtension extends DataExtension {
     // name of the configuration variable which stores the relationship name between feed/item (and item/feed).
-    const RelationshipNameConfigVariable = '';
+    const RelationshipNameConfigVariable = 'feedme_feed_relationship';
 
     // override in concrete extension class to name the config variable used to store the field_map
     // which may differ as a Feed may also be an Item
@@ -107,7 +107,7 @@ class FeedMeModelExtension extends DataExtension {
      * Return the name of the field on the extended model where the Title is stored (via field map).
      * @return mixed
      */
-    public function titleField() {
+    public function titleFieldName() {
         return $this->getModelFieldName(static::TitleFieldName);
     }
 
@@ -115,7 +115,7 @@ class FeedMeModelExtension extends DataExtension {
      * Return the name of the field on the extended model where the External ID is stored (via field map).
      * @return mixed
      */
-    public function linkField() {
+    public function linkFieldName() {
         return $this->getModelFieldName(static::LinkFieldName);
     }
 
@@ -123,7 +123,7 @@ class FeedMeModelExtension extends DataExtension {
      * Return the name of the field on the extended model where the External ID is stored (via field map).
      * @return mixed
      */
-    public function externalIDField() {
+    public function externalIDFieldName() {
         return $this->getModelFieldName(static::ExternalIDFieldName);
     }
 
@@ -132,10 +132,9 @@ class FeedMeModelExtension extends DataExtension {
      *
      * @return string
      */
-    public function lastPublishedDateField() {
+    public function lastPublishedDateFieldName() {
         return $this->getModelFieldName(static::LastPublishedFieldName);
     }
-
     /**
      * Return the name of model field which stores the value for the provided 'neutral' field name.
      *

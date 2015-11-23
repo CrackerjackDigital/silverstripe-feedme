@@ -4,3 +4,7 @@ Name: feedme-config
 Injector:
   FeedMeRSS2Iterator: FeedMeRSS2Iterator
   FeedMeAtomIterator: FeedMeAtomIterator
+FeedMeAtomFeed:
+  xpath: 'xml://feed/entry'
+FeedMeRSS2Feed:
+  xpath: 'xml://channel/item'

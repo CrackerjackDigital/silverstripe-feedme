@@ -4,15 +4,23 @@
  * Provides map function from Atom data to 'neutral' model.
  */
 
-class FeedMeAtomFeedIterator extends FeedMeFeedIterator {
+class FeedMeAtomFeed extends FeedMeXMLFeedIterator implements FeedMeFeedInterface {
+
+    private static $singular_name = 'Atom Feed';
+
+    public function __construct($url, $xpath = null) {
+        parent::__construct($url);
+    }
+
     /**
-     * Return a map of FeedMe field keys to their values which can be used
-     * to map feed data fields to model fields via e.g. FeedMeItemModelExtension.feedMeImport
+     * Map from Atom item data to FeedMe neutral format
+     * ready for updating domain model.
      *
      * @param array $itemDataFromFeed
-     * @return array - 'neutral' map of field names to values not related to extended model fields
+     * @return array 'neutral' map of field names to values not related to
+     * extended model fields
      */
-    public function map(array $itemDataFromFeed) {
+    public function map($itemDataFromFeed) {
         // default link to feed link
         $link = $this->url;
 

@@ -1,23 +1,21 @@
 <?php
 
 /**
- * Add this interface to models which are extended with the FeedMeFeedModelExtension. This
+ * Add this interface to models which are extended with the FeedMeItemModelExtension. This
  * is used to identify FeedMe extended models e.g. while syncing via FeedMeSyncTask. We can't
  * declare the extension method prototypes here as they are implemented in the extension not
  * on the extended model, though they are here for reference.
  */
-interface FeedMeFeedInterface {
+interface FeedMeItemModelInterface {
 
     /**
-     * Called by FeedMeFeedModelExtension when it has finished importing the feed.
-     *
-     * @param array $valuesFromFeed - all values from feed, may not have changed though.
+     * Called by FeedMeItemModelExtension when it has finished importing the feed.
      * @return mixed
      */
-    public function feedMeImported(array $valuesFromFeed = []);
+    public function feedMeImported();
 
     /**
-     * Called by FeedMeFeedModelExtension when it has finished updating the feed model.
+     * Called by FeedMeItemModelExtension when it has finished updating the item model.
      *
      * @param $updatedFields - array of fields which were updated
      * @return mixed

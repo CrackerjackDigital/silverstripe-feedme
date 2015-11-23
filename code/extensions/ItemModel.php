@@ -35,6 +35,7 @@ class FeedMeItemModelExtension extends FeedMeModelExtension {
 
     // default field types incase we need to create fields on the model
     private static $feedme_field_types = [
+        // NB no FeedID field as this is made by relationship
         self::TitleFieldName => self::TitleFieldType,
         self::BodyFieldName => self::BodyFieldType,
         self::ExternalIDFieldName => self::ExternalIDFieldType,
@@ -42,23 +43,8 @@ class FeedMeItemModelExtension extends FeedMeModelExtension {
         self::LastPublishedFieldName => self::LastPublishedFieldType
     ];
 
-    /**
-     * Add has one relationship to class created for Injector service name for self.InjectorServiceName
-     *
-     * @param $class
-     * @param $extension
-     * @param $args
-     * @return array
-     */
-/*
-    TODO: DUNT WORK, MAKE WORK as would be really cool to configure this dynamically from config variables
-    public static function get_extra_config($class, $extension, $args) {
-        return array_merge_recursive(
-            parent::get_extra_config($class, $extension, $args) ?: [],
-            [
-                'has_one' => Config::inst()->get(__CLASS__, 'feedme_item_model_class')
-            ]
-        );
+    public function feedMeFeedFieldName() {
+        return $this->getModelFieldName($this->feedMeRelationship());
     }
-*/
+
 }

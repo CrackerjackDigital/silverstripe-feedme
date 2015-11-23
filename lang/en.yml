@@ -1,3 +1,4 @@
 en:
   FeedMe:
     InvalidFeedMessage: 'Failed to read feed {url}, please ensure it is a valid address and one of the following types {types}'
+    MissingXPathMessage: 'Please provide a source xpath for the feed (no default provided)'

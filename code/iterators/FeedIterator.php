@@ -3,6 +3,8 @@
  * Base class for FeedMe item iterators which return a populated model class on current() call.
  */
 abstract class FeedMeFeedIterator implements Iterator {
+	// override in derived class with e.g. 'xml', 'html', 'json' etc
+	const ContentType = '';
 
     /** @var array */
     protected $items = null;
@@ -17,13 +19,11 @@ abstract class FeedMeFeedIterator implements Iterator {
     protected $url;
 
     /**
-     * @param DOMNodeList $items
      * @param $url - original feed url e.g. for use as default link on item if no specific link can be found
      */
-    public function __construct(array $items, $fieldMap, $url) {
-        $this->items = $items;
-        $this->fieldMap = $fieldMap;
+    public function __construct($url, $xpath) {
         $this->url = $url;
+	    $this->xpath = $xpath;
     }
 
     /**
@@ -39,25 +39,32 @@ abstract class FeedMeFeedIterator implements Iterator {
             $item = $this->items[$this->index];
 
             // import the feed item via a 'neutral' map constructed by concrete class map call.
-            $map = $this->map((array)$item);
+            if ($map = $this->map((array)$item)) {
 
-            // model should have 'FeedMeItemModelExtension' extension
-            $model = Injector::inst()->create('FeedMeItemModel', $map);
+	            // model should have 'FeedMeItemModelExtension' extension
+	            $model = Injector::inst()->create('FeedMeItemModel', $map);
 
-            // give chance to patch up any extra variables from map etc
-            $model->feedMeImported($map);
+	            // give chance to patch up any extra variables from map etc
+	            $model->feedMeImported($map);
 
-            return $model;
+	            return $model;
+            } else {
+	            user_error("Didn't get a valid map back for feed item", E_USER_WARNING);
+            }
         }
     }
+
+	public static function content_type() {
+		return static::ContentType;
+	}
     /**
      * Return a map of FeedMe field keys to their valies which can be used
      * to map feed data fields to model fields via e.g. FeedMeItemModelExtension.feedMeImport
      *
-     * @param array $itemDataFromFeed
+     * @param $itemDataFromFeed
      * @return array - map of standard feedme columns to values , e.g 'Title' => 'Item Title'
      */
-    abstract protected function map(array $itemDataFromFeed);
+    abstract protected function map($itemDataFromFeed);
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>

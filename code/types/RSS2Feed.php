@@ -4,15 +4,18 @@
  * Provides map function from RSS2 data to 'neutral' model.
  */
 
-class FeedMeRSS2FeedIterator extends FeedMeFeedIterator {
-    /**
-     * Return a map of FeedMe field keys to their values which can be used
-     * to map feed data fields to model fields via e.g. FeedMeItemModelExtension.feedMeImport
-     *
-     * @param array $itemDataFromFeed
-     * @return array - 'neutral' map of field names to values not related to extended model fields
-     */
-    public function map(array $itemDataFromFeed) {
+class FeedMeRSS2Feed extends FeedMeXMLFeedIterator implements FeedMeFeedInterface {
+	private static $singular_name = 'RSS2 Feed';
+
+	/**
+	 * Map from RSS item data to FeedMe neutral format
+	 * ready for updating domain model.
+	 *
+	 * @param array $itemDataFromFeed
+	 * @return array 'neutral' map of field names to values not related to
+	 * extended model fields
+	 */
+    public function map($itemDataFromFeed) {
         return array_combine(
             [
                 $this->fieldMap[FeedMeItemModelExtension::TitleFieldName],

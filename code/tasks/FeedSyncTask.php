@@ -44,11 +44,12 @@ class FeedMeSyncTask extends BuildTask {
 
         $implementors = ClassInfo::implementorsOf('FeedMeFeedInterface');
         foreach ($implementors as $className) {
+	        // chance to disable a feed by setting config.excluded_feed_class_names
             if (!in_array($className, $excludedFeedClasses)) {
-                /** @var FeedMeFeedModelExtension $feed */
+                /** @var FeedMeFeedModelExtension $feedModel */
 
-                foreach ($className::get() as $feed) {
-                    $feed->feedMeImport();
+                foreach ($className::get() as $feedModel) {
+                    $feedModel->feedMeImport();
                 }
             }
         }
