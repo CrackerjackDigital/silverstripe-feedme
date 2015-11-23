@@ -42,7 +42,7 @@ class FeedMeSyncTask extends BuildTask {
         // for each implementor of the FeedMeFeedInterface check if it's not excluded then for each
         // instance of that model call feedMeImport on it.
 
-        $implementors = ClassInfo::implementorsOf('FeedMeFeedInterface');
+        $implementors = ClassInfo::implementorsOf('FeedMeFeedModelInterface');
         foreach ($implementors as $className) {
 	        // chance to disable a feed by setting config.excluded_feed_class_names
             if (!in_array($className, $excludedFeedClasses)) {

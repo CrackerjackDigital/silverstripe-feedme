@@ -7,24 +7,13 @@ abstract class FeedMeFeedIterator implements Iterator {
 	const ContentType = '';
 
     /** @var array */
-    protected $items = null;
+    protected $items = [];
 
     /** @var int  */
     protected $index = 0;
 
     /** @var  array */
     protected $fieldMap;
-
-    /** @var  string  */
-    protected $url;
-
-    /**
-     * @param $url - original feed url e.g. for use as default link on item if no specific link can be found
-     */
-    public function __construct($url, $xpath) {
-        $this->url = $url;
-	    $this->xpath = $xpath;
-    }
 
     /**
      * Create a model instance using injector.FeedMeModel and then import values from
@@ -58,7 +47,7 @@ abstract class FeedMeFeedIterator implements Iterator {
 		return static::ContentType;
 	}
     /**
-     * Return a map of FeedMe field keys to their valies which can be used
+     * Return a map of FeedMe field keys to their values which can be used
      * to map feed data fields to model fields via e.g. FeedMeItemModelExtension.feedMeImport
      *
      * @param $itemDataFromFeed

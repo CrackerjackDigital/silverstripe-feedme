@@ -7,12 +7,17 @@
  * xpath is a defined standard.
  */
 abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
-	/** @var  DOMDocument */
-	private $doc;
-
-	public function __construct($url) {
-		parent::__construct($url);
-		$this->doc = new DOMDocument();
-		$this->doc->loadHTMLFile($url);
+	/**
+	 * Load $url as a DOMDocument via loadHTMLFile and initialise items
+	 * from xpath.
+	 *
+	 * @param $url
+	 * @param $xpath
+	 */
+	public function __construct($url, $xpath) {
+		$doc = new DOMDocument();
+		$doc->loadHTMLFile($url);
+		$query = new DOMXPath($doc);
+		$this->items = $query->query($xpath);
 	}
 }

@@ -7,6 +7,8 @@
 class FeedMeRSS2Feed extends FeedMeXMLFeedIterator implements FeedMeFeedInterface {
 	private static $singular_name = 'RSS2 Feed';
 
+	private static $xpath = '//channel/item';
+
 	/**
 	 * Map from RSS item data to FeedMe neutral format
 	 * ready for updating domain model.

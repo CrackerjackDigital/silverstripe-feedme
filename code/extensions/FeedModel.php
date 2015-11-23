@@ -30,17 +30,17 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 
     private static $feedme_item_relationship = self::RelationshipNameDefault;
 
-    // default field map from 'neutral' name to model field name, these should be set in config
+    // default field map from 'neutral' name to model field name, these can be reset in config
     // of the extended model class where fields which already exist are going ot be used instead of
-    // fields added by this extension
+    // fields added by default by this extension
     private static $feedme_field_map = [
         self::TitleFieldName => '',                                     // map to extended classes Title field
         self::DescriptionFieldName => '',                               // map to extended classes Description field
         self::ExternalIDFieldName => self::ExternalIDFieldName,         // default map
         self::LinkFieldName => self::LinkFieldName,                     // default map
         self::LastPublishedFieldName => self::LastPublishedFieldName,    // default map
-        self::FeedTypeFieldName => self::FeedTypeFieldType,
-		self::XPathFieldName => self::XPathFieldType
+        self::FeedTypeFieldName => self::FeedTypeFieldName,
+		self::XPathFieldName => self::XPathFieldName
     ];
 
     // default field types incase we need to create fields on the model
@@ -98,7 +98,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 	    parent::validate($result);
 	    // if no specified xpath then use the default, if no default then
 	    // throw validation exception
-	    if (!$xpath = $this->getFeedXPath()) {
+	    if ($this->owner->ValidateFeed && !$xpath = $this->getFeedXPath()) {
 		    if (!$xpath = $this->defaultXPath()) {
 			    $result->error(
 				    _t('FeedMe.MissingXPathMessage',
@@ -149,7 +149,9 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
      */
     public function feedMeImport() {
 	    /** @var FeedMeFeedIterator $items */
-        if ($items = $this->feed()) {
+	    // feed is an iterator of it's items.
+        if ($feed = $this->feed()) {
+
             $relationshipName = $this->feedMeRelationship();
 
             $externalIDFieldName = Injector::inst()->get('FeedMeItemModel')->externalIDFieldName();
@@ -158,7 +160,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
             $existingItems = $this->owner->$relationshipName();
 
             /** @var DataObject $itemModel, iterator turns feed items into a domain model */
-            foreach ($items as $itemModel) {
+            foreach ($feed as $itemModel) {
                 // if post with the ExternalID already exists then update that one.
                 if ($found = $existingItems->find($externalIDFieldName, $itemModel->{$externalIDFieldName})) {
 
@@ -199,21 +201,36 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 	 */
 	protected function feed() {
 		$url = $this->getFeedURL();
-		$feedClass = $this->getFeedType();
-		$xpath = $this->getFeedXPath();
+		$xpath = $this->getFeedXPath() ?: $this->defaultXPath();
+		$feedClass = $this->feedClassName();
 
-		if ($url && $feedClass && $xpath) {
-			$feed = new $feedClass($url, $xpath);
+		if ($url && $xpath && $feedClass) {
+
+			return new $feedClass($url, $xpath);
 
 		}
 	}
 
-
+	/**
+	 * Return default xpath defined on the Feed class.
+	 * @return string|null
+	 */
 	protected function defaultXPath() {
-		if ($type = $this->owner->{$this->feedTypeFieldName()}) {
-			return Config::inst()->get("FeedMe{$type}", 'xpath');
+		if ($feedClassName = $this->feedClassName()) {
+			return Config::inst()->get($feedClassName, 'xpath');
 		}
 	}
+
+	/**
+	 * Return the name of class which handles fields of the field Type, in this
+	 * case the type is the class.
+	 * @return string
+	 */
+	protected function feedClassName() {
+		$feedType = $this->getFeedType();
+		return $feedType;
+	}
+
 	/**
      * Returns the value of the URL field on the extended class.
      *
@@ -245,7 +262,6 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 	 */
 	public function feedTypeFieldName() {
 		return $this->getModelFieldName(static::FeedTypeFieldName);
-
 	}
 
 	/**

@@ -8,9 +8,7 @@ class FeedMeAtomFeed extends FeedMeXMLFeedIterator implements FeedMeFeedInterfac
 
     private static $singular_name = 'Atom Feed';
 
-    public function __construct($url, $xpath = null) {
-        parent::__construct($url);
-    }
+    private static $xpath = '//feed/entry';
 
     /**
      * Map from Atom item data to FeedMe neutral format
