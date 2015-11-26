@@ -21,7 +21,7 @@ abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
 			$doc->validateOnParse = false;
 			$doc->xmlStandalone = true;
 			$doc->preserveWhiteSpace = false;
-//			$doc->recover = true;
+			$doc->recover = true;
 			$doc->strictErrorChecking = false;
 			libxml_use_internal_errors(true);
 
@@ -110,7 +110,7 @@ abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
 							// links set the link and an md5 hash of it for the ExternalID.
 							$map[$this->fieldMap[$nodeToPropMap[$tagName]]] = $child->getAttribute('href');
 
-							if (!isset($map[$this->fieldMap[FeedMeItemModelExtension::ExternalIDFieldName]])) {
+							if (empty($map[$this->fieldMap[FeedMeItemModelExtension::ExternalIDFieldName]])) {
 								// tested so if this set 'really' then don't overwrite
 								$map[$this->fieldMap[FeedMeItemModelExtension::ExternalIDFieldName]] = md5($child->getAttribute('href'));
 							}
