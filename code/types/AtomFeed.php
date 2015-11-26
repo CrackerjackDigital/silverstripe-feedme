@@ -14,13 +14,14 @@ class FeedMeAtomFeed extends FeedMeXMLFeedIterator implements FeedMeFeedInterfac
      * Map from Atom item data to FeedMe neutral format
      * ready for updating domain model.
      *
-     * @param array $itemDataFromFeed
+     * @param SimpleXMLElement $itemDataFromFeed
      * @return array 'neutral' map of field names to values not related to
      * extended model fields
      */
     public function map($itemDataFromFeed) {
-        // default link to feed link
-        $link = $this->url;
+        $link = $this->getFeedURL();
+
+	    $itemDataFromFeed = (array)$itemDataFromFeed;
 
         if (isset($itemDataFromFeed['link'])) {
             // scan through link nodes and see if we can use one

@@ -15,4 +15,12 @@ interface FeedMeFeedInterface {
 	 * extended model fields
 	 */
 	public function map($itemDataFromFeed);
+
+	/**
+	 * Load the url and return items found using xpath XPath query.
+	 * @param $url
+	 * @param $xpath
+	 * @return Traversable|array|null
+	 */
+	public static function load($url, $xpath);
 }

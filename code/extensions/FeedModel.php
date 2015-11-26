@@ -34,11 +34,11 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
     // of the extended model class where fields which already exist are going ot be used instead of
     // fields added by default by this extension
     private static $feedme_field_map = [
-        self::TitleFieldName => '',                                     // map to extended classes Title field
-        self::DescriptionFieldName => '',                               // map to extended classes Description field
+        self::TitleFieldName => self::TitleFieldName,                   // map to extended classes Title field
+        self::DescriptionFieldName => self::DescriptionFieldName,       // map to extended classes Description field
         self::ExternalIDFieldName => self::ExternalIDFieldName,         // default map
         self::LinkFieldName => self::LinkFieldName,                     // default map
-        self::LastPublishedFieldName => self::LastPublishedFieldName,    // default map
+        self::LastPublishedFieldName => self::LastPublishedFieldName,   // default map
         self::FeedTypeFieldName => self::FeedTypeFieldName,
 		self::XPathFieldName => self::XPathFieldName
     ];
@@ -193,11 +193,22 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 	}
 
 	/**
+	 * Returns map from 'neutral' field names to model properties for this model
+	 * from config.feedme_field_map.
+	 *
+	 * @return array
+	 */
+	public static function field_map() {
+		return Config::inst()->get(get_called_class(), 'feedme_field_map');
+	}
+
+	/**
 	 * Read the feed from remote source using owner.FeedMeLinkFieldName and
 	 * owner.FeedMeFeedType. Return feed item Traversable with items mapped to
 	 * domain model, for example a FeedMeAtomFeedIterator for an atom feed.
 	 *
-	 * @return FeedMeFeedInterface
+	 * @return \FeedMeFeedInterface
+	 * @throws \FeedMeException
 	 */
 	protected function feed() {
 		$url = $this->getFeedURL();
@@ -205,9 +216,12 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 		$feedClass = $this->feedClassName();
 
 		if ($url && $xpath && $feedClass) {
+			$itemModel = Injector::inst()->get('FeedMeItemModel');
+			$fieldMap = $itemModel->fieldMap();
 
-			return new $feedClass($url, $xpath);
-
+			return Injector::Inst()->create($feedClass, $url, $xpath, $fieldMap);
+		} else {
+			throw new FeedMeException(_t("FeedMe.MissingInfoException", 'Missing info for feed {title}', ['title' => $this->owner->Title]));
 		}
 	}
 

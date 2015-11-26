@@ -87,14 +87,6 @@ class FeedMeModelExtension extends DataExtension {
     }
 
     /**
-     * Static field map via singleton of called class.
-     * @return array
-     */
-    public static function field_map() {
-        return singleton(get_called_class())->fieldMap();
-    }
-
-    /**
      * Return this extensions relationship name to other compoenent of the feed/item relationship (not the extended classes).
      *
      * @return string

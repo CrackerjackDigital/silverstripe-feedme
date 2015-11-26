@@ -13,11 +13,14 @@ class FeedMeRSS2Feed extends FeedMeXMLFeedIterator implements FeedMeFeedInterfac
 	 * Map from RSS item data to FeedMe neutral format
 	 * ready for updating domain model.
 	 *
-	 * @param array $itemDataFromFeed
+	 * @param SimpleXMLElement $itemDataFromFeed
 	 * @return array 'neutral' map of field names to values not related to
 	 * extended model fields
 	 */
     public function map($itemDataFromFeed) {
+
+	    $itemDataFromFeed = (array)$itemDataFromFeed;
+
         return array_combine(
             [
                 $this->fieldMap[FeedMeItemModelExtension::TitleFieldName],
