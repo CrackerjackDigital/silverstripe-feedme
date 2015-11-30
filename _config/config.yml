@@ -4,3 +4,5 @@ Name: feedme-config
 Injector:
   FeedMeRSS2Iterator: FeedMeRSS2Iterator
   FeedMeAtomIterator: FeedMeAtomIterator
+FeedMeHTMLFeed:
+  use_link_hash_as_external_id: true
