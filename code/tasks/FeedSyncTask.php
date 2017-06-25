@@ -1,6 +1,6 @@
 <?php
 /**
- * Task to update RssFeeds with new related PostModel's from the feed source.
+ * Task to update RssFeeds with new related Post's from the feed source.
  *
  *  Iterates through all feeds and calls importFeed method on them.
  */
@@ -49,6 +49,7 @@ class FeedMeSyncTask extends BuildTask {
                 /** @var FeedMeFeedModelExtension $feedModel */
 
                 foreach ($className::get() as $feedModel) {
+                	echo "Syncing '$feedModel->Title'\n";
                     $feedModel->feedMeImport();
                 }
             }

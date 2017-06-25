@@ -27,7 +27,7 @@ abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
 			$doc->strictErrorChecking = false;
 			libxml_use_internal_errors(true);
 
-			if ($doc->loadHTMLFile($url)) {
+			if (@$doc->loadHTMLFile($url)) {
 				$query = new DOMXPath($doc);
 				return $query->query($xpath);
 			}
@@ -41,7 +41,7 @@ abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
 	 * @return \DOMNode
 	 */
 	public function item($index) {
-		return $this->items->item($index);
+		return $this->items ? $this->items->item($index) : null;
 	}
 
 	/**
@@ -53,7 +53,7 @@ abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
 	 *                 evaluated. Returns true on success or false on failure.
 	 */
 	public function valid() {
-		return $this->index < $this->items->length;
+		return $this->items ? ($this->index < $this->items->length) : false;
 	}
 
 
@@ -126,10 +126,11 @@ abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
 	 * no external id set an md5 hash of the link (a tag) will be used as the post ExternalID for
 	 * resolving insert/update action.
 	 *
-	 * @param             $tagName
 	 * @param \DOMElement $child
 	 * @param array       $nodeToPropMap
-	 * @return bool         true if tag was handled, false otherwise
+	 * @param array       $map
+	 *
+	 * @return bool true if tag was handled, false otherwise
 	 */
 	protected function child(DOMElement $child, array $nodeToPropMap, array &$map) {
 		$tagName = $child->tagName;

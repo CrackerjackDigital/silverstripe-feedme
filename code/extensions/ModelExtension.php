@@ -1,8 +1,8 @@
 <?php
 
 
-class FeedMeModelExtension extends DataExtension {
-    // name of the configuration variable which stores the relationship name between feed/item (and item/feed).
+class FeedMeModelExtension extends DataExtension implements FeedMeInterface {
+	// name of the configuration variable which stores the relationship name between feed/item (and item/feed).
     const RelationshipNameConfigVariable = 'feedme_feed_relationship';
 
     // override in concrete extension class to name the config variable used to store the field_map
@@ -13,20 +13,6 @@ class FeedMeModelExtension extends DataExtension {
 
     // name of the model which is passed to Injector to find the implementing class
     const InjectorServiceName = '';
-
-    // fields should be defined on extended object (nb not the field names, just the key to map to correct field names)
-    const TitleFieldName = 'FeedMeTitle';
-    const TitleFieldType = 'Varchar(255)';
-
-    // fields added by FeedMe extension
-    const ExternalIDFieldName = 'FeedMeExternalID';
-    const ExternalIDFieldType = 'Varchar(64)';
-
-    const LinkFieldName = 'FeedMeLink';
-    const LinkFieldType = 'Text';
-
-    const LastPublishedFieldName = 'FeedMeLastPublished';
-    const LastPublishedFieldType = 'Varchar(64)';
 
     private static $feedme_field_map = [];
 

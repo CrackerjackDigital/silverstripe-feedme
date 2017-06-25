@@ -6,7 +6,7 @@
  * declare the extension method prototypes here as they are implemented in the extension not
  * on the extended model, though they are here for reference.
  */
-interface FeedMeItemModelInterface {
+interface FeedMeItemModelInterface extends FeedMeInterface {
 
     /**
      * Called by FeedMeItemModelExtension when it has finished importing the feed.

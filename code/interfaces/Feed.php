@@ -4,7 +4,7 @@
  * Implement this interface on a class to have it show in the 'Feed Type'
  * dropdown in the CMS for a given feed instance.
  */
-interface FeedMeFeedInterface {
+interface FeedMeFeedInterface extends FeedMeInterface {
 	/**
 	 * Return a 'neutral' map of FeedMe field keys to their values which can
 	 * be used to map feed data fields to model fields via

@@ -62,7 +62,7 @@ abstract class FeedMeFeedIterator implements Iterator {
 				$model = Injector::inst()->create('FeedMeItemModel', $map);
 
 				// give chance to patch up any extra variables from map etc
-				$model->feedMeImported($map);
+				$model->feedMeImported($map, $item);
 
 				return $model;
 			}

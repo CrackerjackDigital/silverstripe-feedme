@@ -6,15 +6,17 @@
  * declare the extension method prototypes here as they are implemented in the extension not
  * on the extended model, though they are here for reference.
  */
-interface FeedMeFeedModelInterface {
+interface FeedMeFeedModelInterface extends FeedMeInterface {
 
-    /**
-     * Called by FeedMeFeedModelExtension when it has finished importing the feed.
-     *
-     * @param array $valuesFromFeed - all values from feed, may not have changed though.
-     * @return mixed
-     */
-    public function feedMeImported(array $valuesFromFeed = []);
+	/**
+	 * Called by FeedMeFeedModelExtension when it has finished importing the feed.
+	 *
+	 * @param array $mappedValues - map of DataObject field name to values from feed
+	 * @param array $valuesFromFeed - all values from feed, may not have changed though.
+	 *
+	 * @return mixed
+	 */
+    public function feedMeImported(array $mappedValues = [], array $valuesFromFeed = []);
 
     /**
      * Called by FeedMeFeedModelExtension when it has finished updating the feed model.
