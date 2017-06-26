@@ -64,6 +64,8 @@ abstract class FeedMeFeedIterator implements Iterator {
 				// give chance to patch up any extra variables from map etc
 				$model->feedMeImported($map, $item);
 
+				echo "Imported $model->Title\n";
+
 				return $model;
 			}
 			else {

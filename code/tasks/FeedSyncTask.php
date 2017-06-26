@@ -27,6 +27,11 @@ class FeedMeSyncTask extends BuildTask {
      * execute via the TaskRunner
      */
     public function run($request) {
+    	if (Director::is_cli()) {
+    		ob_start();
+	    } else {
+    		ob_start('nl2br');
+	    }
         if (!$adminEmail = $this->config()->get('administrator_email')) {
             $contenders = $this->extend('feedMeAdminEmail') ?: [];
             $adminEmail = reset($contenders);

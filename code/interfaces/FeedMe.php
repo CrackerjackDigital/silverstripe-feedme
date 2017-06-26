@@ -5,15 +5,23 @@
  */
 interface FeedMeInterface {
 	// fields should be defined on extended object (nb not the field names, just the key to map to correct field names)
-	const TitleFieldName = 'FeedMeTitle';
+	const TitleFieldName = 'Title';
 	const TitleFieldType = 'Varchar(255)';
 
-	// fields added by FeedMe extension
+	//
+	// default field names and types, override in e.g. FeedMeItemModelExtension
+	//
 	const ExternalIDFieldName = 'FeedMeExternalID';
 	const ExternalIDFieldType = 'Varchar(64)';
 
 	const LinkFieldName = 'FeedMeLink';
 	const LinkFieldType = 'Text';
+
+	const LinkTitleFieldName = 'FeedMeLinkText';
+	const LinkTitleFieldType = 'Varchar(255)';
+
+	const LinkTextFieldName = 'FeedMeLinkText';
+	const LinkTextFieldType = 'Text';
 
 	const LastPublishedFieldName = 'FeedMeLastPublished';
 	const LastPublishedFieldType = 'Varchar(64)';
@@ -24,7 +32,7 @@ interface FeedMeInterface {
 	const SourceFieldName = 'FeedMeSource';
 	const SourceFieldType = 'Varchar(255)';
 
-	const ImageURLFieldName = 'ImageURL';
+	const ImageURLFieldName = 'FeedMeImageURL';
 	const ImageURLFieldType = 'Text';
 
 }

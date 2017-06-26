@@ -156,6 +156,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 		/** @var FeedMeFeedIterator $items */
 		// feed is an iterator of it's items.
 		if ( $feed = $this->feed() ) {
+			echo "read feed, importing items\n";
 
 			$relationshipName = $this->feedMeRelationship();
 
@@ -168,6 +169,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 			foreach ( $feed as $itemModel ) {
 				// if post with the ExternalID already exists then update that one.
 				if ( $found = $existingItems->find( $externalIDFieldName, $itemModel->{$externalIDFieldName} ) ) {
+					echo "updating item '$itemModel->Title'\n";
 
 					// update the found one from map of the new one
 					$found->update( $itemModel->toMap() );
@@ -177,6 +179,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 						$found->write();
 					}
 				} else {
+					echo "adding new item '$itemModel->Title'\n";
 					/// not found add as a new post.
 					$this->owner->$relationshipName()->add( $itemModel );
 				}

@@ -68,7 +68,7 @@ abstract class FeedMeHTMLFeed extends FeedMeHTMLFeedIterator {
 		$map = array_fill_keys(
 			[
 				$this->fieldMap[FeedMeItemModelExtension::TitleFieldName],
-				$this->fieldMap[FeedMeItemModelExtension::BodyFieldName],
+				$this->fieldMap[FeedMeItemModelExtension::ContentFieldName],
 				$this->fieldMap[FeedMeItemModelExtension::ExternalIDFieldName],
 				$this->fieldMap[FeedMeItemModelExtension::LinkFieldName],
 				$this->fieldMap[FeedMeItemModelExtension::LastPublishedFieldName],

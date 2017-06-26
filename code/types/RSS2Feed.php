@@ -24,38 +24,50 @@ class FeedMeRSS2Feed extends FeedMeXMLFeedIterator implements FeedMeFeedInterfac
 		$fields = array_combine(
 			[
 				$this->fieldMap[ FeedMeItemModelExtension::TitleFieldName ],
-				$this->fieldMap[ FeedMeItemModelExtension::BodyFieldName ],
+				$this->fieldMap[ FeedMeItemModelExtension::ContentFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::ExternalIDFieldName ],
-				$this->fieldMap[ FeedMeItemModelExtension::LinkFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::LastPublishedFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::AuthorFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::SourceFieldName ],
+				$this->fieldMap[ FeedMeItemModelExtension::LinkFieldName ],
+				$this->fieldMap[ FeedMeItemModelExtension::LinkTitleFieldName ],
+				$this->fieldMap[ FeedMeItemModelExtension::LinkTextFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::ImageURLFieldName ],
 			],
 			[
-				(string) $fieldData['title'],
-				(string) $fieldData['description'],
-				(string) $fieldData['guid'],
-				(string) $fieldData['link'],
-				(string) $fieldData['pubDate'],
-				isset( $fieldData['author'] ) ? (string) isset( $fieldData['author'] ) : '',
-				isset( $fieldData['source'] ) ? (string) isset( $fieldData['source'] ) : '',
-				'',
+				isset( $fieldData['title'] ) ? (string) $fieldData['title'] : '',
+				isset( $fieldData['description'] ) ? (string) $fieldData['description'] : '',
+				isset( $fieldData['guid'] ) ? (string) $fieldData['guid'] : '',
+				isset( $fieldData['pubDate'] ) ? (string) $fieldData['pubDate'] : '',
+				isset( $fieldData['author'] ) ? (string) $fieldData['author'] : '',
+				isset( $fieldData['source'] ) ? (string) $fieldData['source'] : '',
+				isset( $fieldData['link'] ) ? (string) $fieldData['link'] : '',
+				isset( $fieldData['title'] ) ? (string) $fieldData['title'] : '',
+				isset( $fieldData['title'] ) ? (string) $fieldData['title'] : '',
+				'', // empty image link out if not set in incoming feed data
 			]
 		);
 		// now add image if one present
 		if ( isset( $xmlElement->enclosure ) ) {
 			$enclosure = $xmlElement->enclosure;
-			$url       = (string) $enclosure['url'];
-			$type      = (string) $enclosure['type'];
+			$imageURL  = (string) $enclosure['url'];
+			$imageType = (string) $enclosure['type'];
 
-			$mimeType = $type ?: ( new Mimey\MimeTypes() )->getMimeType( pathinfo( parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+			$mimeType = $imageType ?: ( new Mimey\MimeTypes() )->getMimeType( pathinfo( parse_url( $imageURL, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
 			if ( $mimeType ) {
 				if ( substr( $mimeType, 0, 5 ) == 'image' ) {
-					$fields[ $this->fieldMap[ FeedMeItemModelExtension::ImageURLFieldName ] ] = $url;
+					// try without a '_rss' in the file name
+					$mangled = str_replace( '_rss.', '.', $imageURL );
+
+					if ( ( $mangled != $imageURL ) && get_headers( $mangled, true ) ) {
+						$imageURL = $mangled;
+					}
+					$fields[ $this->fieldMap[ FeedMeItemModelExtension::ImageURLFieldName ] ] = $imageURL;
+					echo "added image '$imageURL'\n";
 				}
 			}
 		}
+
 		return $fields;
 	}
 }

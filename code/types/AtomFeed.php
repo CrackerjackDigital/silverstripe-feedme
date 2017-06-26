@@ -39,7 +39,7 @@ class FeedMeAtomFeed extends FeedMeXMLFeedIterator implements FeedMeFeedInterfac
 		return array_combine(
 			[
 				$this->fieldMap[ FeedMeItemModelExtension::TitleFieldName ],
-				$this->fieldMap[ FeedMeItemModelExtension::BodyFieldName ],
+				$this->fieldMap[ FeedMeItemModelExtension::ContentFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::ExternalIDFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::LinkFieldName ],
 				$this->fieldMap[ FeedMeItemModelExtension::LastPublishedFieldName ],
