@@ -59,6 +59,10 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 		self::XPathFieldName         => self::XPathFieldType,
 	];
 
+	public function mappableSourcePathDelimiter() {
+		return '/';
+	}
+
 	/**
 	 * Add URL field and a read-only External ID field to CMS form.
 	 *
