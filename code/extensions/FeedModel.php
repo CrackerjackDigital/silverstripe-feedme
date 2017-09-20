@@ -317,6 +317,14 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 		return $this->owner->config()->get( 'feedme_import_on_write' );
 	}
 
+	public static function import_on_write($set = null) {
+		$setting = \Config::inst()->get( static::class, 'feedme_import_on_write' );
+		if (!is_null($set)) {
+			\Config::inst()->update( static::class, 'feedme_import_on_write', $set );
+		}
+		return $setting;
+	}
+
 	/**
 	 * @return \DataObject|MappableInterface
 	 */
