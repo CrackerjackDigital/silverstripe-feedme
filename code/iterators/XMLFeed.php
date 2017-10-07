@@ -12,16 +12,18 @@ abstract class FeedMeXMLFeedIterator extends FeedMeFeedIterator {
 			CURLOPT_ENCODING       => "",       // handle all encodings
 			CURLOPT_USERAGENT      => "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0", // something like Firefox
 			CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-			CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-			CURLOPT_TIMEOUT        => 120,      // timeout on response
-			CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+			CURLOPT_CONNECTTIMEOUT => 10,      // timeout on connect
+			CURLOPT_TIMEOUT        => 10,      // timeout on response
+			CURLOPT_MAXREDIRS      => 5,       // stop after 10 redirects
 		);
 		$curl    = curl_init();
 		curl_setopt_array( $curl, $options );
 		$content = curl_exec( $curl );
 		curl_close( $curl );
 
-		if ( $doc = simplexml_load_string( $content ) ) {
+		libxml_use_internal_errors(false);
+
+		if ( $doc = simplexml_load_string( 'asdasdads'. $content ) ) {
 			return $doc->xpath( $xpath );
 		}
 	}
