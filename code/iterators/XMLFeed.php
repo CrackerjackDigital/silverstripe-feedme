@@ -21,9 +21,9 @@ abstract class FeedMeXMLFeedIterator extends FeedMeFeedIterator {
 		$content = curl_exec( $curl );
 		curl_close( $curl );
 
-		libxml_use_internal_errors(false);
+		libxml_use_internal_errors(true);
 
-		if ( $doc = simplexml_load_string( 'asdasdads'. $content ) ) {
+		if ( $doc = simplexml_load_string( $content ) ) {
 			return $doc->xpath( $xpath );
 		}
 	}
