@@ -1,10 +1,12 @@
 <?php
 
 use Modular\Interfaces\Mappable as MappableInterface;
+use Modular\Traits\enabler;
 use Modular\Traits\mappable_model;
 
 class FeedMeFeedModelExtension extends FeedMeModelExtension {
 	use mappable_model;
+	use enabler;
 
 	const DescriptionFieldName  = 'FeedMeDescription';
 	const DescriptionFieldType  = 'HTMLText';
@@ -147,7 +149,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 	 * Import feed after write if owner.config.feedme_import_on_write is true.
 	 */
 	public function onAfterWrite() {
-		if ( $this->importOnWrite() ) {
+		if ( $this->enabled() ) {
 			$this->feedMeImport();
 		}
 	}
@@ -306,23 +308,6 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 	public function xpathFieldName() {
 		return $this->getModelFieldName( static::XPathFieldName );
 
-	}
-
-	/**
-	 * Return the extended objects config.feedme_import_on_write.
-	 *
-	 * @return boolean
-	 */
-	private function importOnWrite() {
-		return $this->owner->config()->get( 'feedme_import_on_write' );
-	}
-
-	public static function import_on_write($set = null) {
-		$setting = \Config::inst()->get( static::class, 'feedme_import_on_write' );
-		if (!is_null($set)) {
-			\Config::inst()->update( static::class, 'feedme_import_on_write', $set );
-		}
-		return $setting;
 	}
 
 	/**
