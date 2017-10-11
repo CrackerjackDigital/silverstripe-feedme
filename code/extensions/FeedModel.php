@@ -48,6 +48,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 		self::LastPublishedFieldName => self::LastPublishedFieldName,   // default map
 		self::FeedTypeFieldName      => self::FeedTypeFieldName,
 		self::XPathFieldName         => self::XPathFieldName,
+		self::ImageURLFieldName      => self::ImageURLFieldName,
 	];
 
 	// default field types incase we need to create fields on the model
@@ -59,6 +60,7 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 		self::LastPublishedFieldName => self::LastPublishedFieldType,
 		self::FeedTypeFieldName      => self::FeedTypeFieldType,
 		self::XPathFieldName         => self::XPathFieldType,
+		self::ImageURLFieldName      => self::ImageURLFieldType,
 	];
 
 	public function mappableSourcePathDelimiter() {
@@ -186,6 +188,9 @@ class FeedMeFeedModelExtension extends FeedMeModelExtension {
 					}
 				} else {
 					echo "adding new item '$itemModel->Title'\n";
+
+					$itemModel->write();
+
 					/// not found add as a new post.
 					$this->owner->$relationshipName()->add( $itemModel );
 				}
